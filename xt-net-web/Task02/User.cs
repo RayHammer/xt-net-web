@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Task02
 {
@@ -15,44 +11,77 @@ namespace Task02
 
         public User(string surname, string name, string middlename, DateTime dateOfBirth)
         {
-            if (surname.Length == 0)
+            Surname = surname;
+            Name = name;
+            MiddleName = middlename;
+            DateOfBirth = dateOfBirth;
+        }
+
+        public string Surname
+        {
+            get => surname;
+            set
             {
-                throw new ArgumentException("Surname is empty");
+                if (value.Length == 0)
+                {
+                    throw new ArgumentException("Surname is empty");
+                }
+                surname = value;
             }
-            if (name.Length == 0)
+        }
+
+        public string MiddleName
+        {
+            get; set;
+        }
+
+        public string Name
+        {
+            get => name;
+            set
             {
-                throw new ArgumentException("First name is empty");
+                if (value.Length == 0)
+                {
+                    throw new ArgumentException("First name is empty");
+                }
+                name = value;
             }
-            this.surname = surname;
-            this.name = name;
-            this.middlename = middlename;
-            this.dateOfBirth = dateOfBirth;
+        }
+
+        public DateTime DateOfBirth
+        {
+            get; set;
+        }
+
+        public int Age
+        {
+            get
+            {
+                var today = DateTime.Today;
+                var age = today.Year - DateOfBirth.Year;
+                if (DateOfBirth > today.AddYears(-age))
+                {
+                    age--;
+                }
+                return age;
+            }
         }
 
         public string FullName
         {
             get
             {
-                if (middlename.Length == 0)
+                if (MiddleName.Length == 0)
                 {
-                    return name + " " + surname;
+                    return Name + " " + Surname;
                 }
                 else
                 {
-                    return name + " " + middlename + " " + surname;
+                    return Name + " " + MiddleName + " " + Surname;
                 }
             }
         }
 
-        public string DateOfBirth
-        {
-            get
-            {
-                return dateOfBirth.ToString();
-            }
-        }
-
-        private string surname, name, middlename;
-        private DateTime dateOfBirth;
+        private string name, surname;
     }
 }

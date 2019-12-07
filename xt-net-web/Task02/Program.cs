@@ -10,7 +10,8 @@ namespace Task02
     {
         static void Main(string[] args)
         {
-            Task02.Round();
+            Task02.VectorGraphicsEditor();
+            Console.ReadKey();
         }
     }
 }

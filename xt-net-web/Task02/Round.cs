@@ -2,10 +2,7 @@
 
 namespace Task02
 {
-    /// <summary>
-    /// Should've been called a Circle IMO
-    /// </summary>
-    class Round
+    class Round : Figure
     {
         public Round(float x = 0.0f, float y = 0.0f, float r = 1.0f)
         {
@@ -20,14 +17,12 @@ namespace Task02
 
         public float X
         {
-            get => x;
-            set => x = value;
+            get; set;
         }
 
         public float Y
         {
-            get => y;
-            set => y = value;
+            get; set;
         }
 
         public float R
@@ -35,34 +30,47 @@ namespace Task02
             get => r;
             set
             {
+                r = value;
                 if (r < 0)
                 {
-                    throw new ArgumentOutOfRangeException("r", r, "Circle's radius is incorrect");
+                    throw new ArgumentOutOfRangeException("R", r, "Circle's radius is incorrect");
                 }
-                r = value;
             }
         }
 
         public float Circumference
         {
-            get => (float)(2 * Math.PI * r);
+            get => (float)(2 * Math.PI * R);
         }
 
         public float Area
         {
-            get => (float)(Math.PI * Math.Pow(r, 2));
+            get => (float)(Math.PI * Math.Pow(R, 2));
         }
 
         public bool IntersectsWithPoint(float x, float y)
         {
-            if (Math.Pow(x - this.x, 2) + Math.Pow(y - this.y, 2) <= Math.Pow(r, 2))
+            if (Math.Pow(x - X, 2) + Math.Pow(y - Y, 2) <= Math.Pow(R, 2))
             {
                 return true;
             }
             return false;
         }
 
-        private float x, y;
+        public override string ToString()
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append(Name);
+            sb.Append('{');
+            sb.Append("X = ").Append(X).Append(',');
+            sb.Append("Y = ").Append(Y).Append(',');
+            sb.Append("R = ").Append(R).Append(',');
+            sb.Append('}');
+            return sb.ToString();
+        }
+
+        protected override string Name => "Round";
+
         private float r;
     }
 }
