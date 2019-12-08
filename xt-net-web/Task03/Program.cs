@@ -10,7 +10,8 @@ namespace Task03
     {
         static void Main(string[] args)
         {
-
+            Task03.DynamicArrayPreview();
+            Console.ReadKey();
         }
     }
 }
