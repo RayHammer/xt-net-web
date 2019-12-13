@@ -10,7 +10,7 @@ namespace Task04
     {
         static void Main(string[] args)
         {
-            Task04.ToIntOrNotToInt();
+            Task04.ISeekYou();
             Console.ReadKey();
         }
     }

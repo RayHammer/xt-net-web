@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seeker.cs" />
     <Compile Include="SortingUnit.cs" />
     <Compile Include="Task04.cs" />
     <Compile Include="Utility.cs" />

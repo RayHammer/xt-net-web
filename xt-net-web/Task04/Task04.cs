@@ -58,7 +58,42 @@ namespace Task04
                 Console.WriteLine("{0} => {1}", i, i.IsUInt());
             }
         }
+        public static void ISeekYou()
+        {
+            var n = 100;
+            var input = new List<int>();
+            for (var i = 0; i < n; i++)
+            {
+                if (i % 2 != 0)
+                {
+                    input.Add(i);
+                }
+                else
+                {
+                    input.Add(-i);
+                }
+            }
+            var list1 = Seeker.GetPositive(input);
+            var list2 = Seeker.GetCertain(input, IsPositive);
+            Predicate<int> isPositive = delegate (int _n)
+            {
+                return _n > 0;
+            };
+            var list3 = Seeker.GetCertain(input, isPositive);
+            var list4 = Seeker.GetCertain(input, (int _n) =>
+            {
+                return _n > 0;
+            });
+            var query = from i in input
+                        where i > 0
+                        select i;
+            var list5 = query.ToList();
+        }
 
+        private static bool IsPositive(int n)
+        {
+            return n > 0;
+        }
         private static void SortFinished(object sender, object e)
         {
             Console.WriteLine("Finished sorting.");
