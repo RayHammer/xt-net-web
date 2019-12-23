@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Task05
 {
@@ -22,6 +19,7 @@ namespace Task05
                 return;
             app = new BackupSystem(args);
             app.Run();
+            Console.WriteLine("App terminated. Press any key to continue.");
             Console.ReadKey();
         }
 
@@ -99,7 +97,6 @@ namespace Task05
                     CheckForBackup();
                     Thread.Sleep(BACKUP_DELAY);
                 }
-                Console.WriteLine("App terminated.");
             });
             thread.Start();
             Console.WriteLine("App is running. To terminate it, press any key");
@@ -114,11 +111,40 @@ namespace Task05
                 Console.WriteLine("No backup directory!");
                 return;
             }
-            var files = GetAllFiles(Environment.CurrentDirectory);
-            foreach (var i in files)
+
+            // Getting the rollback date
+            Console.WriteLine("Please input formatted time string");
+            Console.WriteLine("Example: {0}", DateTime.Now.ToString());
+            DateTime? dateTime = null;
+            while (dateTime == null)
             {
-                // File.Delete(i);
+                try
+                {
+                    dateTime = DateTime.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Couldn't parse the date. Please try again");
+                }
             }
+
+            // Searching for the matching backup folder
+            DirectoryInfo foundBackupDir = GetLatestBackup(dateTime.Value);
+            if (foundBackupDir == null)
+            {
+                Console.WriteLine("No backup was made before this date!");
+                return;
+            }
+
+            // Purging all existing files
+            string currentPath = Environment.CurrentDirectory;
+            ICollection<string> files = GetAllFiles(currentPath);
+            foreach (var file in files)
+            {
+                File.Delete(currentPath + file);
+            }
+
+            CopyContents(foundBackupDir.FullName, currentPath);
         }
         private void CheckForBackup()
         {
@@ -128,6 +154,7 @@ namespace Task05
             {
                 Console.WriteLine("No backup directory! Creating " + BACKUP_DIRECTORY);
                 backupDir.Create();
+                backupDir.Attributes = FileAttributes.Hidden;
             }
 
             // Finding out whether the backup is necessary
@@ -139,16 +166,16 @@ namespace Task05
                 string latestBackupData = File.ReadAllText(cacheFilePath);
                 if (latestData == latestBackupData)
                 {
-                    Console.WriteLine("No changes!");
                     return;
                 }
             }
 
             // Backing up files
-            string backupSubdirPath = GetFormattedTimeNow();
+            string backupSubdirPath = GetFormattedTime(DateTime.Now);
             backupSubdirPath = backupDir.CreateSubdirectory(backupSubdirPath).FullName;
             CopyContents(dir, backupSubdirPath);
             File.WriteAllText(backupSubdirPath + '\\' + CACHE_FILENAME, latestData);
+            Console.WriteLine("Backing up at {0}.", backupSubdirPath);
         }
         private void CopyContents(string from, string to)
         {
@@ -221,6 +248,24 @@ namespace Task05
             }
             return latestBackup;
         }
+        private DirectoryInfo GetLatestBackup(DateTime dateTime)
+        {
+            string dateTimeFormatted = GetFormattedTime(dateTime);
+            DirectoryInfo latestBackup = null;
+            DirectoryInfo[] backupDirArr = backupDir.GetDirectories();
+            if (backupDirArr.Length != 0)
+            {
+                foreach (var subdir in backupDirArr)
+                {
+                    if ((latestBackup == null || subdir.Name.CompareTo(latestBackup.Name) > 0)
+                        && subdir.Name.CompareTo(dateTimeFormatted) < 0)
+                    {
+                        latestBackup = subdir;
+                    }
+                }
+            }
+            return latestBackup;
+        }
         private string GenerateFileInfo(string path)
         {
             ICollection<string> files = GetAllFiles(path);
@@ -232,9 +277,9 @@ namespace Task05
             }
             return info.ToString();
         }
-        private string GetFormattedTimeNow()
+        private string GetFormattedTime(DateTime dateTime)
         {
-            return Regex.Replace(DateTime.Now.ToString("s"), ":", "-");
+            return Regex.Replace(dateTime.ToString("s"), ":", "-");
         }
     }
 }
