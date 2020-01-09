@@ -21,7 +21,7 @@ namespace Task06.DAL
 
             user.Id = lastId + 1;
             userDb.Add(user.Id, user);
-            SaveDatabase();
+            SaveDatabase(userDb);
             return user;
         }
 
@@ -30,11 +30,16 @@ namespace Task06.DAL
             return userDb.Values;
         }
 
+        public User GetById(int id)
+        {
+            return userDb[id];
+        }
+
         public void Remove(int id)
         {
             if (userDb.Remove(id))
             {
-                SaveDatabase();
+                SaveDatabase(userDb);
             }
         }
 
@@ -60,10 +65,10 @@ namespace Task06.DAL
             return db;
         }
 
-        private void SaveDatabase()
+        private static void SaveDatabase(IDictionary<int, User> db)
         {
             var data = new StringBuilder();
-            foreach (var user in GetAll())
+            foreach (var user in db.Values)
             {
                 data.Append(user.Id).Append(',').
                     Append(user.Name).Append(',').

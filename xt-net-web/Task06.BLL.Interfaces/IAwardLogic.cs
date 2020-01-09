@@ -3,13 +3,13 @@ using Task06.Entities;
 
 namespace Task06.BLL.Interfaces
 {
-    public interface IUserLogic
+    public interface IAwardLogic
     {
-        User Add(User user);
+        Award Add(Award award);
 
-        User GetById(int id);
+        IEnumerable<Award> GetAll();
 
-        IEnumerable<User> GetAll();
+        Award GetById(int id);
 
         void Remove(int id);
     }

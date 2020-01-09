@@ -3,13 +3,13 @@ using Task06.Entities;
 
 namespace Task06.DAL.Interfaces
 {
-    public interface IUserDao
+    public interface IAwardDao
     {
-        User Add(User user);
+        Award Add(Award award);
 
-        IEnumerable<User> GetAll();
+        IEnumerable<Award> GetAll();
 
-        User GetById(int id);
+        Award GetById(int id);
 
         void Remove(int id);
     }

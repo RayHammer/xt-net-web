@@ -24,6 +24,11 @@ namespace Task06.BLL
             return userDao.Add(user);
         }
 
+        public User GetById(int id)
+        {
+            return userDao.GetById(id);
+        }
+
         public IEnumerable<User> GetAll()
         {
             return userDao.GetAll();
