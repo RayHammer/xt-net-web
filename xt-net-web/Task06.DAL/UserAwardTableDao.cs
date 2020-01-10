@@ -5,7 +5,7 @@ using Task06.DAL.Interfaces;
 
 namespace Task06.DAL
 {
-    internal class UserAwardTableDao : IUserAwardTableDao
+    public class UserAwardTableDao : IUserAwardTableDao
     {
         private static readonly string filePath = Environment.CurrentDirectory + @"\users-awards.rel";
         private static readonly char[] separator = { ',' };
@@ -30,6 +30,10 @@ namespace Task06.DAL
 
         public IEnumerable<int> GetAwardIdsFor(int userId)
         {
+            if (!table.ContainsKey(userId))
+            {
+                return null;
+            }
             return table[userId];
         }
 
@@ -85,7 +89,7 @@ namespace Task06.DAL
                     foreach (var awardId in table[userId])
                     {
                         writer.Write(awardId);
-                        writer.WriteLine(separator[0]);
+                        writer.Write(separator[0]);
                     }
                     writer.WriteLine();
                 }

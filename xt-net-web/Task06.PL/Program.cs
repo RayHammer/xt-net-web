@@ -15,7 +15,7 @@ namespace Task06.PL
 
         private static void Main(string[] args)
         {
-            userLogic = new UserLogic(new UserDao());
+            userLogic = new UserLogic(new UserDao(), new UserAwardTableDao());
             awardLogic = new AwardLogic(new AwardDao());
 
             while (ProcessInput())
@@ -79,6 +79,11 @@ namespace Task06.PL
                     foreach (var entry in userLogic.GetAll())
                     {
                         WriteLine(entry.ToString());
+                        foreach (var award in userLogic.GetAwardsFor(entry.Id, awardLogic))
+                        {
+                            Write(" - ");
+                            WriteLine(award.ToString());
+                        }
                     }
                     break;
 
@@ -95,6 +100,25 @@ namespace Task06.PL
                 }
                 break;
 
+            case "award":
+                switch (commandArgs[1].ToLower())
+                {
+                case "assign":
+                    userLogic.AddAward(int.Parse(commandArgs[2]),
+                        awardLogic.GetById(int.Parse(commandArgs[3])));
+                    break;
+
+                case "revoke":
+                    userLogic.RemoveAward(int.Parse(commandArgs[2]),
+                        awardLogic.GetById(int.Parse(commandArgs[3])));
+                    break;
+
+                default:
+                    WriteLine("Usage: award <assign/revoke> (userId) (awardId)");
+                    break;
+                }
+                break;
+
             case "exit":
                 return false;
             }
@@ -105,6 +129,11 @@ namespace Task06.PL
         {
             Console.Write(q + "> ");
             return Console.ReadLine();
+        }
+
+        private static void Write(string value)
+        {
+            Console.Write(value);
         }
 
         private static void WriteLine(string value)

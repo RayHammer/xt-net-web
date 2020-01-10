@@ -7,10 +7,16 @@ namespace Task06.BLL.Interfaces
     {
         User Add(User user);
 
-        User GetById(int id);
+        void AddAward(int userId, Award award);
 
         IEnumerable<User> GetAll();
 
+        IEnumerable<Award> GetAwardsFor(int id, IAwardLogic awards);
+
+        User GetById(int id);
+
         void Remove(int id);
+
+        void RemoveAward(int userId, Award award);
     }
 }
