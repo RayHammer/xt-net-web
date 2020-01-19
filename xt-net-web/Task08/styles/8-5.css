@@ -1,0 +1,74 @@
+@import url('clear.css');
+
+body {
+    background-color: #4E6379;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.menu-block {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 20px;
+    padding: 20px;
+    width: 950px;
+}
+
+.menu-block > div {
+    padding: 0 25px;
+    text-align: center;
+    width: 33%;
+}
+
+.menu-block > div:not(:first-child) {
+    border-left: 1px solid lightgray;
+}
+
+.menu-block > div h1 {
+    color: #F56332;
+    display: inline-block;
+    font-size: x-large;
+    margin-bottom: 0.5em;
+}
+
+.menu-block p {
+    margin: 0.5em 0;
+}
+
+.menu-block .button {
+    background-color: #F56332;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    margin: 0.5em 0;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.icon {
+    display: inline-block;
+}
+
+.hosting-icon1 {
+    background-image: url(../img/hosting-icons.png);
+    background-position: 0px 0px;
+    height: 65px;
+    width: 95px;
+}
+
+.hosting-icon2 {
+    background-image: url(../img/hosting-icons.png);
+    background-position: 0px -66px;
+    height: 65px;
+    width: 95px;
+}
+
+.hosting-icon3 {
+    background-image: url(../img/hosting-icons.png);
+    background-position: 0px -132px;
+    height: 65px;
+    width: 95px;
+}

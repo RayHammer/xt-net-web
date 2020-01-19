@@ -1,0 +1,39 @@
+@import url('clear.css');
+
+body {
+    background-color: #333333;
+}
+
+.pointing-block {
+    background-color: #88B7D5;
+    border: 5px solid #C4E2F6;
+    color: white;
+    font-size: x-large;
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.pointing-block::before {
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 50px solid #C4E2F6;
+    content: "";
+    height: 50px;
+    left: calc(50% - 50px);
+    position: absolute;
+    top: -50px;
+    z-index: -1;
+}
+
+.pointing-block::after {
+    border-left: 48px solid transparent;
+    border-right: 48px solid transparent;
+    border-bottom: 48px solid #88B7D5;
+    content: "";
+    height: calc(50px + 7px);
+    left: calc(50% - 48px);
+    position: absolute;
+    top: -50px;
+    z-index: 1;
+}
