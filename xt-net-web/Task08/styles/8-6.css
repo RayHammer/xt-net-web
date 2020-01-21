@@ -1,0 +1,29 @@
+@import url('clear.css');
+
+body {
+    background-color: #333333;
+}
+
+.equalizer {
+    display: flex;
+    align-items: flex-end;
+    flex-flow: row nowrap;
+    margin: 20px;
+}
+
+.bar {
+    background-color: #FF9200;
+    background: linear-gradient(to top, #FF9200, #FFCF55);
+    border-radius: 10px 10px 0 0;
+    margin: 5px;
+    width: 45px;
+}
+
+.bar > div {
+    height: 25px;
+    border-bottom: 5px solid #333333;
+}
+
+.bar > div:last-child {
+    border-bottom: none;
+}

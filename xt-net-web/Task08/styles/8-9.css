@@ -1,0 +1,52 @@
+@import url('clear.css');
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.step-counter {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 45px;
+}
+
+.step {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+    background-color: #DEDEDE;
+    background: linear-gradient(to top,
+        #DEDEDE, #BFBFBF 50%, #DEDEDE 100%);
+    color: black;
+    font-size: large;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    width: 150px;
+}
+
+.step:hover {
+    background-color: #DEDEDE;
+    background: linear-gradient(to top,
+        #AEE189, #64C51D 50%, #AEE189 100%);
+        color: white;
+}
+
+.step:not(:first-child)::before, 
+.step:not(:first-child)::after {
+    content: "";
+    display: block;
+    position: absolute;
+    transform: translateX(-15px) skewX(20deg);
+    top: 0;
+    height: calc(50% + 0.5px);
+    width: 10px;
+    background-color: white;
+    z-index: 1;
+}
+
+.step:not(:first-child)::after {
+    top: calc(50% - 1px);
+    transform: translateX(-15px) skewX(-20deg);
+}
