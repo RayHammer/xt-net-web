@@ -1,18 +1,24 @@
+"use strict";
+
 (function() {
     const countdownMax = 9;
-    const slides = document.querySelectorAll("#presentation > section");
+    const slides = ["9-4-1.htm", "9-4-2.htm", "9-4-3.htm"];
     const counter = document.getElementById("counter");
     const counterText = counter.firstElementChild;
     const goBackButton = document.getElementById("go-back");
-    let currentSlide = 0;
     let countdown = countdownMax;
     let counterTimer, isTicking = false;
+    let currentSlide = (() => {
+        let pagename = window.location.pathname.split("/").pop();
+        for (let i = 0; i < slides.length; i++) {
+            if (slides[i] == pagename) {
+                return i;
+            }
+        }
+    })();
 
     function setActiveSlide(id) {
-        slides.forEach(element => {
-            element.style.display = "none";
-        });
-        slides[id].style.display = "block";
+        window.location.replace(slides[id]);
     }
 
     function tick() {
@@ -55,7 +61,6 @@
         }
     }
 
-    setActiveSlide(currentSlide);
     counterText.innerText = countdown;
     toggleTick();
 
