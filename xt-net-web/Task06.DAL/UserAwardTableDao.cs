@@ -7,9 +7,20 @@ namespace Task06.DAL
 {
     public class UserAwardTableDao : IUserAwardTableDao
     {
-        private static readonly string filePath = Environment.CurrentDirectory + @"\users-awards.rel";
         private static readonly char[] separator = { ',' };
-        private static readonly IDictionary<int, IList<int>> table = LoadTable();
+        private static IDictionary<int, IList<int>> table;
+        private static string filePath;
+
+        public UserAwardTableDao()
+            : this(Environment.CurrentDirectory + @"\users-awards.rel")
+        {
+        }
+
+        public UserAwardTableDao(string path)
+        {
+            filePath = path;
+            table = LoadTable();
+        }
 
         public void Add(int userId, int awardId)
         {

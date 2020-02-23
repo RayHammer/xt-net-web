@@ -10,8 +10,19 @@ namespace Task06.DAL
 {
     public class AwardDao : IAwardDao
     {
-        private static readonly string dbPath = Environment.CurrentDirectory + @"\awards.db";
-        private static readonly IDictionary<int, Award> awardDb = LoadDatabase();
+        private static IDictionary<int, Award> awardDb;
+        private static string dbPath;
+
+        public AwardDao()
+            : this(Environment.CurrentDirectory + @"\awards.db")
+        {
+        }
+
+        public AwardDao(string path)
+        {
+            dbPath = path;
+            awardDb = LoadDatabase();
+        }
 
         public Award Add(Award award)
         {

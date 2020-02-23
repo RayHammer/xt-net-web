@@ -10,8 +10,19 @@ namespace Task06.DAL
 {
     public class UserDao : IUserDao
     {
-        private static readonly string dbPath = Environment.CurrentDirectory + @"\users.db";
-        private static readonly IDictionary<int, User> userDb = LoadDatabase();
+        private static IDictionary<int, User> userDb;
+        private static string dbPath;
+
+        public UserDao()
+            : this(Environment.CurrentDirectory + @"\users.db")
+        {
+        }
+
+        public UserDao(string path)
+        {
+            dbPath = path;
+            userDb = LoadDatabase();
+        }
 
         public User Add(User user)
         {
