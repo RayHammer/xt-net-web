@@ -34,6 +34,24 @@
         case "remove-user":
             userLogic.Remove(int.Parse(Request["Id"]));
             break;
+        case "add-award":
+            awardLogic.Add(new Task06.Entities.Award()
+            {
+                Title = Request["Title"]
+            });
+            page = "awards";
+            break;
+        case "update-award":
+            awardLogic.Update(int.Parse(Request["Id"]), new Task06.Entities.Award()
+            {
+                Title = Request["Title"]
+            });
+            page = "awards";
+            break;
+        case "remove-award":
+            awardLogic.Remove(int.Parse(Request["Id"]));
+            page = "awards";
+            break;
         }
     }
     else
@@ -71,7 +89,7 @@
         <hr />
         <h3>Add</h3>
         <form action="~/Index" method="post" class="form-inline">
-            <input hidden type="text" name="Type" value="add-user" />
+            <input type="hidden" name="Type" value="add-user" />
             <div class="form-group row">
                 <div class="col">
                     <input type="text" name="Name" placeholder="Name" class="form-control" />
@@ -87,7 +105,7 @@
         <hr />
         <h3>Update</h3>
         <form action="~/Index" method="post" class="form-inline">
-            <input hidden type="text" name="Type" value="update-user" />
+            <input type="hidden" name="Type" value="update-user" />
             <div class="form-group row">
                 <div class="col">
                     <input type="text" name="Id" placeholder="Id" class="form-control" />
@@ -106,7 +124,7 @@
         <hr />
         <h3>Remove</h3>
         <form action="~/Index" method="post" class="form-inline">
-            <input hidden type="text" name="Type" value="remove-user" />
+            <input type="hidden" name="Type" value="remove-user" />
             <div class="form-group row">
                 <div class="col">
                     <input type="text" name="Id" placeholder="Id" class="form-control" />
@@ -121,9 +139,53 @@
         foreach (var entry in awardLogic.GetAll())
         {
             <h4>
+                <img width="80" height="80" src="~/Content/Images/award-placeholder.png" />
+                <br />
                 @entry.ToString()
             </h4>
         }
+        <hr />
+        <h3>Add</h3>
+        <form action="~/Index" method="post" class="form-inline">
+            <input type="hidden" name="Type" value="add-award" />
+            <div class="form-group row">
+                <div class="col">
+                    <input type="text" name="Title" placeholder="Title" class="form-control" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+        <hr />
+        <h3>Update</h3>
+        <form action="~/Index" method="post" class="form-inline">
+            <input type="hidden" name="Type" value="update-award" />
+            <div class="form-group row">
+                <div class="col">
+                    <input type="text" name="Id" placeholder="Id" class="form-control" />
+                </div>
+                <div class="col">
+                    <input type="text" name="Title" placeholder="Title" class="form-control" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </form>
+        <hr />
+        <h3>Remove</h3>
+        <form action="~/Index" method="post" class="form-inline">
+            <input type="hidden" name="Type" value="remove-award" />
+            <div class="form-group row">
+                <div class="col">
+                    <input type="text" name="Id" placeholder="Id" class="form-control" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Remove</button>
+                </div>
+            </div>
+        </form>
         break;
     }
 </div>
