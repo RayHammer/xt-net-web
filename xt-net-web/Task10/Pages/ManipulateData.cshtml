@@ -1,0 +1,74 @@
+﻿@using Task06.BLL;
+@using Task06.BLL.Interfaces;
+@using Task06.DAL;
+@{
+    IUserLogic userLogic = new UserLogic(
+        new UserDao(Server.MapPath("~/App_Data/users.db")),
+        new UserAwardTableDao(Server.MapPath("~/App_Data/users-awards.rel")));
+    IAwardLogic awardLogic = new AwardLogic(
+        new AwardDao(Server.MapPath("~/App_Data/awards.db")));
+
+    string page = "~";
+
+    if (IsPost && User.IsInRole("Admin"))
+    {
+        switch (Request["Type"])
+        {
+        case "add-user":
+            userLogic.Add(new Task06.Entities.User()
+            {
+                Name = Request["Name"],
+                DateOfBirth = DateTime.Parse(Request["DateOfBirth"])
+            });
+            break;
+        case "update-user":
+            userLogic.Update(int.Parse(Request["Id"]), new Task06.Entities.User()
+            {
+                Name = Request["Name"],
+                DateOfBirth = DateTime.Parse(Request["DateOfBirth"])
+            });
+            break;
+        case "remove-user":
+            userLogic.Remove(int.Parse(Request["Id"]));
+            break;
+        case "give-award":
+            userLogic.AddAward(int.Parse(Request["Id"]),
+                awardLogic.GetById(int.Parse(Request["Award"])));
+            break;
+        case "revoke-award":
+            if (Request["ForAll"] != null)
+            {
+                foreach (var entry in userLogic.GetAll())
+                {
+                    userLogic.RemoveAward(entry.Id,
+                        awardLogic.GetById(int.Parse(Request["Award"])));
+                }
+            }
+            else
+            {
+                userLogic.RemoveAward(int.Parse(Request["Id"]),
+                    awardLogic.GetById(int.Parse(Request["Award"])));
+            }
+            break;
+        case "add-award":
+            awardLogic.Add(new Task06.Entities.Award()
+            {
+                Title = Request["Title"]
+            });
+            page = "~/Index?page=awards";
+            break;
+        case "update-award":
+            awardLogic.Update(int.Parse(Request["Id"]), new Task06.Entities.Award()
+            {
+                Title = Request["Title"]
+            });
+            page = "~/Index?page=awards";
+            break;
+        case "remove-award":
+            awardLogic.Remove(int.Parse(Request["Id"]));
+            page = "~/Index?page=awards";
+            break;
+        }
+    }
+    Response.Redirect(page);
+}

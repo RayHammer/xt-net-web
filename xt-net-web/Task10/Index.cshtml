@@ -13,67 +13,7 @@
 
     string page = "users";
 
-    if (IsPost)
-    {
-        switch (Request["Type"])
-        {
-        case "add-user":
-            userLogic.Add(new Task06.Entities.User()
-            {
-                Name = Request["Name"],
-                DateOfBirth = DateTime.Parse(Request["DateOfBirth"])
-            });
-            break;
-        case "update-user":
-            userLogic.Update(int.Parse(Request["Id"]), new Task06.Entities.User()
-            {
-                Name = Request["Name"],
-                DateOfBirth = DateTime.Parse(Request["DateOfBirth"])
-            });
-            break;
-        case "remove-user":
-            userLogic.Remove(int.Parse(Request["Id"]));
-            break;
-        case "give-award":
-            userLogic.AddAward(int.Parse(Request["Id"]),
-                awardLogic.GetById(int.Parse(Request["Award"])));
-            break;
-        case "revoke-award":
-            if (Request["ForAll"] != null)
-            {
-                foreach (var entry in userLogic.GetAll())
-                {
-                    userLogic.RemoveAward(entry.Id,
-                        awardLogic.GetById(int.Parse(Request["Award"])));
-                }
-            }
-            else
-            {
-                userLogic.RemoveAward(int.Parse(Request["Id"]),
-                    awardLogic.GetById(int.Parse(Request["Award"])));
-            }
-            break;
-        case "add-award":
-            awardLogic.Add(new Task06.Entities.Award()
-            {
-                Title = Request["Title"]
-            });
-            page = "awards";
-            break;
-        case "update-award":
-            awardLogic.Update(int.Parse(Request["Id"]), new Task06.Entities.Award()
-            {
-                Title = Request["Title"]
-            });
-            page = "awards";
-            break;
-        case "remove-award":
-            awardLogic.Remove(int.Parse(Request["Id"]));
-            page = "awards";
-            break;
-        }
-    }
-    else
+    if (!IsPost)
     {
         if (Request["Page"] != null)
         {
@@ -82,9 +22,18 @@
     }
 }
 
-<h1>Hello</h1>
+@if (!User.Identity.IsAuthenticated)
+{
+    <h1>Hello</h1>
+    <a href="~/Pages/Login" class="btn btn-primary">Login</a>
+}
+else
+{
+    <h1>Hello, @User.Identity.Name</h1>
+    <a href="~/Pages/Logout" class="btn btn-outline-primary">Logout</a>
+}
 <nav class="nav">
-    <a class="nav-link" href="Index?page=users">Users</a>
+    <a class="nav-link" href="Index">Users</a>
     <a class="nav-link" href="Index?page=awards">Awards</a>
 </nav>
 <div>
@@ -96,101 +45,107 @@
             <h4>
                 @entry.ToString();
             </h4>
-            <ul>
-                @foreach (var award in userLogic.GetAwardsFor(entry.Id, awardLogic))
-                {
-                    <li>
-                        @award.ToString()
-                    </li>
-                }
-            </ul>
+            if (User.IsInRole("User") || User.IsInRole("Admin"))
+            {
+                <ul>
+                    @foreach (var award in userLogic.GetAwardsFor(entry.Id, awardLogic))
+                    {
+                        <li>
+                            @award.ToString()
+                        </li>
+                    }
+                </ul>
+            }
         }
-        <hr />
-        <h3>Add</h3>
-        <form action="~/Index" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="add-user" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="text" name="Name" placeholder="Name" class="form-control" />
+        if (User.IsInRole("Admin"))
+        {
+            <hr />
+            <h3>Add</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="add-user" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="text" name="Name" placeholder="Name" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <input type="text" name="DateOfBirth" placeholder="DateOfBirth" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
                 </div>
-                <div class="col">
-                    <input type="text" name="DateOfBirth" placeholder="DateOfBirth" class="form-control" />
+            </form>
+            <hr />
+            <h3>Update</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="update-user" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="text" name="Id" placeholder="Id" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <input type="text" name="Name" placeholder="Name" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <input type="text" name="DateOfBirth" placeholder="DateOfBirth" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
                 </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+            <hr />
+            <h3>Remove</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="remove-user" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="text" name="Id" placeholder="Id" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Remove</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-        <hr />
-        <h3>Update</h3>
-        <form action="~/Index" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="update-user" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="text" name="Id" placeholder="Id" class="form-control" />
+            </form>
+            <hr />
+            <h3>Give award</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="give-award" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="number" name="Id" placeholder="Id" class="form-control" />
+                    </div>
+                    <select name="Award" class="custom-select mr-sm-3">
+                        @foreach (var award in awardLogic.GetAll())
+                        {
+                            <option value="@award.Id">@award.Title</option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary">Give award</button>
                 </div>
-                <div class="col">
-                    <input type="text" name="Name" placeholder="Name" class="form-control" />
+            </form>
+            <hr />
+            <h3>Revoke award</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="revoke-award" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="number" name="Id" placeholder="Id" class="form-control" />
+                    </div>
+                    <select name="Award" class="custom-select mr-sm-3">
+                        @foreach (var award in awardLogic.GetAll())
+                        {
+                            <option value="@award.Id">@award.Title</option>
+                        }
+                    </select>
+                    <div class="form-check mr-sm-3">
+                        <input type="checkbox" name="ForAll" class="form-check-input" />
+                        <label class="form-check-label">For everyone</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Revoke award</button>
                 </div>
-                <div class="col">
-                    <input type="text" name="DateOfBirth" placeholder="DateOfBirth" class="form-control" />
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </div>
-        </form>
-        <hr />
-        <h3>Remove</h3>
-        <form action="~/Index" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="remove-user" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="text" name="Id" placeholder="Id" class="form-control" />
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Remove</button>
-                </div>
-            </div>
-        </form>
-        <hr />
-        <h3>Give award</h3>
-        <form action="~/Index" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="give-award" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="number" name="Id" placeholder="Id" class="form-control" />
-                </div>
-                <select name="Award" class="custom-select mr-sm-3">
-                    @foreach (var award in awardLogic.GetAll())
-                    {
-                        <option value="@award.Id">@award.Title</option>
-                    }
-                </select>
-                <button type="submit" class="btn btn-primary">Give award</button>
-            </div>
-        </form>
-        <hr />
-        <h3>Revoke award</h3>
-        <form action="~/Index" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="revoke-award" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="number" name="Id" placeholder="Id" class="form-control" />
-                </div>
-                <select name="Award" class="custom-select mr-sm-3">
-                    @foreach (var award in awardLogic.GetAll())
-                    {
-                        <option value="@award.Id">@award.Title</option>
-                    }
-                </select>
-                <div class="form-check mr-sm-3">
-                    <input type="checkbox" name="ForAll" class="form-check-input" />
-                    <label class="form-check-label">For everyone</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Revoke award</button>
-            </div>
-        </form>
+            </form>
+        }
         break;
     case "awards":
         foreach (var entry in awardLogic.GetAll())
@@ -203,7 +158,7 @@
         }
         <hr />
         <h3>Add</h3>
-        <form action="~/Index" method="post" class="form-inline">
+        <form action="~/Pages/ManipulateData" method="post" class="form-inline">
             <input type="hidden" name="Type" value="add-award" />
             <div class="form-group row">
                 <div class="col">
@@ -216,7 +171,7 @@
         </form>
         <hr />
         <h3>Update</h3>
-        <form action="~/Index" method="post" class="form-inline">
+        <form action="~/Pages/ManipulateData" method="post" class="form-inline">
             <input type="hidden" name="Type" value="update-award" />
             <div class="form-group row">
                 <div class="col">
@@ -232,7 +187,7 @@
         </form>
         <hr />
         <h3>Remove</h3>
-        <form action="~/Index" method="post" class="form-inline">
+        <form action="~/Pages/ManipulateData" method="post" class="form-inline">
             <input type="hidden" name="Type" value="remove-award" />
             <div class="form-group row">
                 <div class="col">
