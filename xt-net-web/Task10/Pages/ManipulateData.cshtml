@@ -55,16 +55,9 @@
             {
                 Title = Request["Title"]
             };
-            if (Request.Files.Count > 0)
+            if (Request["ImageSource"].Length != 0)
             {
-                var uploadedFile = Request.Files[0];
-                var fileName = Path.GetFileName(uploadedFile.FileName);
-                if (!File.Exists(Server.MapPath("~/Сontent/Images/" + fileName)))
-                {
-                    var fileSavePath = Server.MapPath("~/Сontent/Images/" + fileName);
-                    uploadedFile.SaveAs(fileSavePath);
-                    award.ImageSource = fileSavePath;
-                }
+                award.ImageSource = Request["ImageSource"];
             }
             awardLogic.Add(award);
             page = "~/Index?page=awards";

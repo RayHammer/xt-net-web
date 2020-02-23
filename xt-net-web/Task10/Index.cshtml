@@ -164,7 +164,7 @@ else
                 }
                 else
                 {
-                    <img width="80" height="80" src="@entry.ImageSource" />
+                    <img width="80" height="80" src="@("/Content/Images/" + entry.ImageSource)" />
                 }
                 <h4>
                     <br />
@@ -178,12 +178,19 @@ else
                 <div class="form-group">
                     <input type="text" name="Title" placeholder="Title" class="form-control mr-2" />
                 </div>
-                <div class="form-group">
-                    <input type="file" accept="image/*" name="Files" class="mr-2" />
-                    <button class="btn btn-secondary upload-files">Upload file</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                <div class="input-group mb-2">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" accept="image/*" name="Image" id="inputGroupFile01" />
+                        <label class="custom-file-label" for="inputGroupFile01">Choose image</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="input-group-text" id="UploadFiles01">Upload</button>
+                    </div>
                 </div>
-                <div class="ajax-reply"></div>
+                <input type="hidden" id="imageSource01" name="ImageSource" value="" />
+                <img id="image01" width="80" />
+                <br />
+                <button type="submit" class="btn btn-primary">Add</button>
             </form>
             <hr />
             <h3>Update</h3>

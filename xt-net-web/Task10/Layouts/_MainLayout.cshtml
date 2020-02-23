@@ -5,59 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@Page.Title</title>
     <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-    <script src="~/Scripts/popper.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
 </head>
 <body>
     <div class="container-xl">
         @RenderBody()
     </div>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <script>
-        var files;
-        $('input[type=file]').on('change', function () {
-            files = this.files;
+        var file;
+        $('#inputGroupFile01').on('change', function () {
+            file = this.files[0];
         })
 
-        $('.upload_files').on('click', function (event) {
-
+        $('#UploadFiles01').on('click', function (event) {
             event.stopPropagation();
             event.preventDefault();
-
-            if (typeof files == 'undefined') return;
+                
+            if (typeof file == 'undefined') return;
 
             var data = new FormData();
-            $.each(files, function (key, value) {
-                data.append(key, value);
-            });
-            data.append('fileupload', 1);
+            console.log(file);
+            data.append("file", file)
             $.ajax({
                 url: '/Pages/UploadFiles',
                 type: 'POST',
                 data: data,
                 cache: false,
-                dataType: 'json',
                 processData: false,
                 contentType: false,
                 success: function (respond, status, jqXHR) {
-                    if (typeof respond.error === 'undefined') {
-                        var files_path = respond.files;
-                        var html = '';
-                        $.each(files_path, function (key, val) {
-                            html += val + '<br>';
-                        })
-
-                        $('.ajax-reply').html(html);
-                    }
-                    else {
-                        console.log('ОШИБКА: ' + respond.error);
+                    if (respond != "error") {
+                        let imgFolder = "./Content/Images/";
+                        $("#image01").attr("src", imgFolder + respond)
+                        $("#imageSource01").attr("value", respond);
+                    } else {
+                        $("#image01").attr("src", "");
+                        $("#imageSource01").attr("value", "");
                     }
                 },
                 error: function (jqXHR, status, errorThrown) {
                     console.log('ОШИБКА AJAX запроса: ' + status, jqXHR);
                 }
             });
-
         });
     </script>
 </body>
