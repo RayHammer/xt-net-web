@@ -1,0 +1,10 @@
+﻿@{
+    string input = "Bruh sound effect #2";
+
+    if (IsAjax && Request["fileupload"] != null)
+    {
+        input = "It works";
+    }
+}
+
+@input

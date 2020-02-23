@@ -51,10 +51,22 @@
             }
             break;
         case "add-award":
-            awardLogic.Add(new Task06.Entities.Award()
+            var award = new Task06.Entities.Award()
             {
                 Title = Request["Title"]
-            });
+            };
+            if (Request.Files.Count > 0)
+            {
+                var uploadedFile = Request.Files[0];
+                var fileName = Path.GetFileName(uploadedFile.FileName);
+                if (!File.Exists(Server.MapPath("~/Сontent/Images/" + fileName)))
+                {
+                    var fileSavePath = Server.MapPath("~/Сontent/Images/" + fileName);
+                    uploadedFile.SaveAs(fileSavePath);
+                    award.ImageSource = fileSavePath;
+                }
+            }
+            awardLogic.Add(award);
             page = "~/Index?page=awards";
             break;
         case "update-award":

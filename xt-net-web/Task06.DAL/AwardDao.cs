@@ -76,7 +76,12 @@ namespace Task06.DAL
                 {
                     Id = int.Parse(entryInfo[0]),
                     Title = entryInfo[1],
+                    ImageSource = null
                 };
+                if (entryInfo.Length > 2)
+                {
+                    award.ImageSource = entryInfo[2];
+                }
                 db.Add(award.Id, award);
             }
             return db;
@@ -88,8 +93,9 @@ namespace Task06.DAL
             foreach (var award in db.Values)
             {
                 data.Append(award.Id).Append(',').
-                    Append(award.Title).Append(',').
-                    Append(Environment.NewLine);
+                    Append(award.Title).Append(',');
+                data.Append(award.ImageSource);
+                data.Append(Environment.NewLine);
             }
             File.WriteAllText(dbPath, data.ToString());
         }

@@ -8,7 +8,7 @@ namespace Task10.Models
 {
     public class AppRoleProvider : RoleProvider
     {
-        private readonly Dictionary<string, List<string>> roles = new Dictionary<string, List<string>>();
+        private static readonly Dictionary<string, List<string>> roles = new Dictionary<string, List<string>>();
 
         public AppRoleProvider()
         {
@@ -28,16 +28,28 @@ namespace Task10.Models
             return roles.ContainsKey(username) ? roles[username].ToArray() : Array.Empty<string>();
         }
 
-        public bool ContainsUser(string username)
+        public static bool UserHasRole(string username, string roleName)
         {
-            return roles.ContainsKey(username);
+            return roles.ContainsKey(username) && roles[username].Contains(roleName);
         }
 
-        public bool RegisterUser(string username)
+        public static bool PromoteUser(string username)
         {
-            if (ContainsUser(username))
+            if (roles.ContainsKey(username))
                 return false;
-            roles[username] = new List<string>() { "User" };
+            roles[username] = new List<string>() { "Admin" };
+            return true;
+        }
+
+        public static bool DemoteUser(string username)
+        {
+            if (!roles.ContainsKey(username))
+                return false;
+            roles[username].Remove("Admin");
+            if (roles[username].Count == 0)
+            {
+                roles.Remove(username);
+            }
             return true;
         }
 

@@ -12,6 +12,11 @@
             get; set;
         }
 
+        public string ImageSource
+        {
+            get; set;
+        } = null;
+
         public override string ToString()
         {
             return $"{Id}, {Title}";

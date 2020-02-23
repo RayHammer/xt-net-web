@@ -1,4 +1,5 @@
-﻿@using Task06.BLL;
+﻿@using Task10.Models;
+@using Task06.BLL;
 @using Task06.BLL.Interfaces;
 @using Task06.DAL;
 @{
@@ -37,6 +38,7 @@ else
         <nav class="nav">
             <a class="nav-link" href="Index">Users</a>
             <a class="nav-link" href="Index?page=awards">Awards</a>
+            <a class="nav-link" href="Index?page=profiles">Profiles</a>
         </nav>
     }
 }
@@ -156,55 +158,76 @@ else
         {
             foreach (var entry in awardLogic.GetAll())
             {
-                <h4>
+                if (entry.ImageSource == null || entry.ImageSource.Length == 0)
+                {
                     <img width="80" height="80" src="~/Content/Images/award-placeholder.png" />
+                }
+                else
+                {
+                    <img width="80" height="80" src="@entry.ImageSource" />
+                }
+                <h4>
                     <br />
                     @entry.ToString()
                 </h4>
             }
             <hr />
             <h3>Add</h3>
-            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+            <form action="~/Pages/ManipulateData" method="post">
                 <input type="hidden" name="Type" value="add-award" />
-                <div class="form-group row">
-                    <div class="col">
-                        <input type="text" name="Title" placeholder="Title" class="form-control" />
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
+                <div class="form-group">
+                    <input type="text" name="Title" placeholder="Title" class="form-control mr-2" />
                 </div>
+                <div class="form-group">
+                    <input type="file" accept="image/*" name="Files" class="mr-2" />
+                    <button class="btn btn-secondary upload-files">Upload file</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+                <div class="ajax-reply"></div>
             </form>
             <hr />
             <h3>Update</h3>
             <form action="~/Pages/ManipulateData" method="post" class="form-inline">
                 <input type="hidden" name="Type" value="update-award" />
-                <div class="form-group row">
-                    <div class="col">
-                        <input type="text" name="Id" placeholder="Id" class="form-control" />
-                    </div>
-                    <div class="col">
-                        <input type="text" name="Title" placeholder="Title" class="form-control" />
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
+                <div class="form-group">
+                    <input type="text" name="Id" placeholder="Id" class="form-control mr-2" />
+                    <input type="text" name="Title" placeholder="Title" class="form-control mr-2" />
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
             <hr />
             <h3>Remove</h3>
             <form action="~/Pages/ManipulateData" method="post" class="form-inline">
                 <input type="hidden" name="Type" value="remove-award" />
-                <div class="form-group row">
-                    <div class="col">
-                        <input type="text" name="Id" placeholder="Id" class="form-control" />
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary">Remove</button>
-                    </div>
+                <div class="form-group">
+                    <input type="text" name="Id" placeholder="Id" class="form-control mr-2" />
+                    <button type="submit" class="btn btn-primary">Remove</button>
                 </div>
             </form>
         }
+        break;
+    case "profiles":
+        <ul class="list-group">
+            @foreach (var entry in AuthModel.AuthList.Keys)
+            {
+            <li class="list-group-item">
+                @entry
+                @if (AppRoleProvider.UserHasRole(entry, "Admin")) {
+                    <span class="badge badge-primary">Admin</span>
+                }
+            </li>
+            }
+        </ul>
+        <hr />
+        <form action="~/Pages/ProfileManipulation" method="post" class="form-inline">
+            <select name="Profile" class="custom-select mr-sm-3">
+                @foreach (var entry in AuthModel.AuthList.Keys)
+                {
+                    <option value="@entry">@entry</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">Promote/Demote</button>
+        </form>
         break;
     }
 </div>

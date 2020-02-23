@@ -1,0 +1,16 @@
+﻿@using Task10.Models
+@{
+    if (IsPost && User.IsInRole("Admin"))
+    {
+        string username = Request["Profile"];
+        if (AppRoleProvider.UserHasRole(username, "Admin"))
+        {
+            AppRoleProvider.DemoteUser(username);
+        }
+        else
+        {
+            AppRoleProvider.PromoteUser(username);
+        }
+    }
+    Response.Redirect("~/Index?page=profiles");
+}

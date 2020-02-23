@@ -23,14 +23,14 @@ namespace Task10.Models
 
         public static bool LoginSuccessful(string username, string password)
         {
-            return AuthList[username] == password;
+            return AuthList.ContainsKey(username) ? AuthList[username] == password : false;
         }
 
         public static bool RegisterUser(string username, string password)
         {
             if (AuthList.ContainsKey(username))
                 return false;
-            AuthList[username] = password;
+            AuthList.Add(username, password);
             return true;
         }
     }
