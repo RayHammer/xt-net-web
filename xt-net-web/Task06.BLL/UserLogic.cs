@@ -28,7 +28,7 @@ namespace Task06.BLL
 
         public void AddAward(int userId, Award award)
         {
-            if (userDao.GetById(userId) == null && award == null)
+            if (GetById(userId) == null && award == null)
             {
                 throw new InvalidOperationException();
             }
@@ -69,6 +69,15 @@ namespace Task06.BLL
         {
             userDao.Remove(id);
             userAwardTableDao.Clear(id);
+        }
+
+        public void Update(int id, User user)
+        {
+            if (userDao.GetById(id) == null || user.Name.Length == 0)
+            {
+                throw new InvalidOperationException();
+            }
+            userDao.Update(id, user);
         }
 
         public void RemoveAward(int userId, Award award)

@@ -12,5 +12,7 @@ namespace Task06.DAL.Interfaces
         User GetById(int id);
 
         void Remove(int id);
+
+        void Update(int id, User user);
     }
 }

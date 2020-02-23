@@ -54,6 +54,13 @@ namespace Task06.DAL
             }
         }
 
+        public void Update(int id, User user)
+        {
+            user.Id = id;
+            userDb[id] = user;
+            SaveDatabase(userDb);
+        }
+
         private static IDictionary<int, User> LoadDatabase()
         {
             var db = new Dictionary<int, User>();

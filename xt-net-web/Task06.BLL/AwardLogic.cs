@@ -38,5 +38,14 @@ namespace Task06.BLL
         {
             awardDao.Remove(id);
         }
+
+        public void Update(int id, Award award)
+        {
+            if (GetById(id) == null || award.Title.Length == 0)
+            {
+                throw new InvalidOperationException();
+            }
+            awardDao.Update(id, award);
+        }
     }
 }

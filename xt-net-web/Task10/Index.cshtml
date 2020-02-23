@@ -1,9 +1,6 @@
-﻿@using System.Collections.Generic;
-@using System.Text;
-@using Task06.BLL;
+﻿@using Task06.BLL;
 @using Task06.BLL.Interfaces;
 @using Task06.DAL;
-@using Task06.Entities;
 @{
     Layout = "~/Layouts/_MainLayout.cshtml";
     Page.Title = "Index";
@@ -14,29 +11,53 @@
     IAwardLogic awardLogic = new AwardLogic(
         new AwardDao(Server.MapPath("~/App_Data/awards.db")));
 
-    string request = "users";
-    if (!IsPost)
+    string page = "users";
+
+    if (IsPost)
     {
-        var page = Request["Page"];
-        if (page != null)
+        switch (Request["Type"])
         {
-            request = page;
+        case "add-user":
+            userLogic.Add(new Task06.Entities.User()
+            {
+                Name = Request["Name"],
+                DateOfBirth = DateTime.Parse(Request["DateOfBirth"])
+            });
+            break;
+        case "update-user":
+            userLogic.Update(int.Parse(Request["Id"]), new Task06.Entities.User()
+            {
+                Name = Request["Name"],
+                DateOfBirth = DateTime.Parse(Request["DateOfBirth"])
+            });
+            break;
+        case "remove-user":
+            userLogic.Remove(int.Parse(Request["Id"]));
+            break;
+        }
+    }
+    else
+    {
+        if (Request["Page"] != null)
+        {
+            page = Request["Page"];
         }
     }
 }
 
+<h1>Hello</h1>
 <nav class="nav">
     <a class="nav-link" href="Index?page=users">Users</a>
     <a class="nav-link" href="Index?page=awards">Awards</a>
 </nav>
 <div>
-    @switch (request)
+    @switch (page)
     {
     case "users":
         foreach (var entry in userLogic.GetAll())
         {
             <h4>
-                @entry.ToString()
+                @entry.ToString();
             </h4>
             <ul>
                 @foreach (var award in userLogic.GetAwardsFor(entry.Id, awardLogic))
@@ -47,6 +68,54 @@
                 }
             </ul>
         }
+        <hr />
+        <h3>Add</h3>
+        <form action="~/Index" method="post" class="form-inline">
+            <input hidden type="text" name="Type" value="add-user" />
+            <div class="form-group row">
+                <div class="col">
+                    <input type="text" name="Name" placeholder="Name" class="form-control" />
+                </div>
+                <div class="col">
+                    <input type="text" name="DateOfBirth" placeholder="DateOfBirth" class="form-control" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+        <hr />
+        <h3>Update</h3>
+        <form action="~/Index" method="post" class="form-inline">
+            <input hidden type="text" name="Type" value="update-user" />
+            <div class="form-group row">
+                <div class="col">
+                    <input type="text" name="Id" placeholder="Id" class="form-control" />
+                </div>
+                <div class="col">
+                    <input type="text" name="Name" placeholder="Name" class="form-control" />
+                </div>
+                <div class="col">
+                    <input type="text" name="DateOfBirth" placeholder="DateOfBirth" class="form-control" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </form>
+        <hr />
+        <h3>Remove</h3>
+        <form action="~/Index" method="post" class="form-inline">
+            <input hidden type="text" name="Type" value="remove-user" />
+            <div class="form-group row">
+                <div class="col">
+                    <input type="text" name="Id" placeholder="Id" class="form-control" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Remove</button>
+                </div>
+            </div>
+        </form>
         break;
     case "awards":
         foreach (var entry in awardLogic.GetAll())

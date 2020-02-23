@@ -54,6 +54,13 @@ namespace Task06.DAL
             }
         }
 
+        public void Update(int id, Award award)
+        {
+            award.Id = id;
+            awardDb[id] = award;
+            SaveDatabase(awardDb);
+        }
+
         private static IDictionary<int, Award> LoadDatabase()
         {
             var db = new Dictionary<int, Award>();

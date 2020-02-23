@@ -12,5 +12,7 @@ namespace Task06.BLL.Interfaces
         Award GetById(int id);
 
         void Remove(int id);
+
+        void Update(int id, Award award);
     }
 }

@@ -34,9 +34,12 @@ namespace Task06.DAL
 
         public void Clear(int userId)
         {
-            table[userId].Clear();
-            table.Remove(userId);
-            SaveTable(table);
+            if (table.ContainsKey(userId))
+            {
+                table[userId].Clear();
+                table.Remove(userId);
+                SaveTable(table);
+            }
         }
 
         public IEnumerable<int> GetAwardIdsFor(int userId)
