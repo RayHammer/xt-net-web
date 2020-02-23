@@ -1,4 +1,5 @@
-﻿@using System.Text;
+﻿@using System.Collections.Generic;
+@using System.Text;
 @using Task06.BLL;
 @using Task06.BLL.Interfaces;
 @using Task06.DAL;
@@ -12,22 +13,48 @@
         new UserAwardTableDao(Server.MapPath("~/App_Data/users-awards.rel")));
     IAwardLogic awardLogic = new AwardLogic(
         new AwardDao(Server.MapPath("~/App_Data/awards.db")));
+
+    string request = "users";
+    if (!IsPost)
+    {
+        var page = Request["Page"];
+        if (page != null)
+        {
+            request = page;
+        }
+    }
 }
 
-<h1>Index</h1>
+<nav class="nav">
+    <a class="nav-link" href="Index?page=users">Users</a>
+    <a class="nav-link" href="Index?page=awards">Awards</a>
+</nav>
 <div>
-    @foreach (var entry in userLogic.GetAll())
+    @switch (request)
     {
-        <h4>
-            @entry.ToString()
-        </h4>
-        <ul>
-            @foreach (var award in userLogic.GetAwardsFor(entry.Id, awardLogic))
-            {
-                <li>
-                    @award.ToString()
-                </li>
-            }
-        </ul>
+    case "users":
+        foreach (var entry in userLogic.GetAll())
+        {
+            <h4>
+                @entry.ToString()
+            </h4>
+            <ul>
+                @foreach (var award in userLogic.GetAwardsFor(entry.Id, awardLogic))
+                {
+                    <li>
+                        @award.ToString()
+                    </li>
+                }
+            </ul>
+        }
+        break;
+    case "awards":
+        foreach (var entry in awardLogic.GetAll())
+        {
+            <h4>
+                @entry.ToString()
+            </h4>
+        }
+        break;
     }
 </div>
