@@ -14,11 +14,7 @@ namespace Task10.Models
         {
             roles["admin"] = new List<string>()
             {
-                "User", "Admin"
-            };
-            roles["user"] = new List<string>()
-            {
-                "User"
+                "Admin"
             };
         }
 

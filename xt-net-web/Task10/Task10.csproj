@@ -121,6 +121,7 @@
     <Content Include="Pages\Login.cshtml" />
     <Content Include="Pages\Logout.cshtml" />
     <Content Include="Pages\ManipulateData.cshtml" />
+    <Content Include="Pages\Register.cshtml" />
     <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
     <Content Include="Scripts\jquery-3.0.0.min.js" />

@@ -26,16 +26,20 @@
 {
     <h1>Hello</h1>
     <a href="~/Pages/Login" class="btn btn-primary">Login</a>
+    <a href="~/Pages/Register" class="btn btn-primary">Register</a>
 }
 else
 {
     <h1>Hello, @User.Identity.Name</h1>
     <a href="~/Pages/Logout" class="btn btn-outline-primary">Logout</a>
+    if (User.IsInRole("Admin"))
+    {
+        <nav class="nav">
+            <a class="nav-link" href="Index">Users</a>
+            <a class="nav-link" href="Index?page=awards">Awards</a>
+        </nav>
+    }
 }
-<nav class="nav">
-    <a class="nav-link" href="Index">Users</a>
-    <a class="nav-link" href="Index?page=awards">Awards</a>
-</nav>
 <div>
     @switch (page)
     {
@@ -45,7 +49,7 @@ else
             <h4>
                 @entry.ToString();
             </h4>
-            if (User.IsInRole("User") || User.IsInRole("Admin"))
+            if (User.Identity.IsAuthenticated)
             {
                 <ul>
                     @foreach (var award in userLogic.GetAwardsFor(entry.Id, awardLogic))
@@ -148,56 +152,59 @@ else
         }
         break;
     case "awards":
-        foreach (var entry in awardLogic.GetAll())
+        if (User.IsInRole("Admin"))
         {
-            <h4>
-                <img width="80" height="80" src="~/Content/Images/award-placeholder.png" />
-                <br />
-                @entry.ToString()
-            </h4>
+            foreach (var entry in awardLogic.GetAll())
+            {
+                <h4>
+                    <img width="80" height="80" src="~/Content/Images/award-placeholder.png" />
+                    <br />
+                    @entry.ToString()
+                </h4>
+            }
+            <hr />
+            <h3>Add</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="add-award" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="text" name="Title" placeholder="Title" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </form>
+            <hr />
+            <h3>Update</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="update-award" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="text" name="Id" placeholder="Id" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <input type="text" name="Title" placeholder="Title" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </form>
+            <hr />
+            <h3>Remove</h3>
+            <form action="~/Pages/ManipulateData" method="post" class="form-inline">
+                <input type="hidden" name="Type" value="remove-award" />
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="text" name="Id" placeholder="Id" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Remove</button>
+                    </div>
+                </div>
+            </form>
         }
-        <hr />
-        <h3>Add</h3>
-        <form action="~/Pages/ManipulateData" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="add-award" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="text" name="Title" placeholder="Title" class="form-control" />
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-            </div>
-        </form>
-        <hr />
-        <h3>Update</h3>
-        <form action="~/Pages/ManipulateData" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="update-award" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="text" name="Id" placeholder="Id" class="form-control" />
-                </div>
-                <div class="col">
-                    <input type="text" name="Title" placeholder="Title" class="form-control" />
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </div>
-        </form>
-        <hr />
-        <h3>Remove</h3>
-        <form action="~/Pages/ManipulateData" method="post" class="form-inline">
-            <input type="hidden" name="Type" value="remove-award" />
-            <div class="form-group row">
-                <div class="col">
-                    <input type="text" name="Id" placeholder="Id" class="form-control" />
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Remove</button>
-                </div>
-            </div>
-        </form>
         break;
     }
 </div>

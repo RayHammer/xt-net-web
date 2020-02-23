@@ -1,0 +1,30 @@
+﻿@using Task10.Models;
+@{
+    Layout = "~/Layouts/_MainLayout.cshtml";
+    Page.Title = "Register";
+
+    if (IsPost)
+    {
+        string login = Request["Login"];
+        string password =  Request["Password"];
+        string repeatPassword =  Request["RepeatPassword"];
+
+        if (password == repeatPassword)
+        {
+            if (AuthModel.RegisterUser(login, password) &&
+                AuthModel.LoginSuccessful(login, password))
+            {
+                FormsAuthentication.SetAuthCookie(login, true);
+                Response.Redirect("~");
+            }
+        }
+    }
+}
+
+<form action="~/Pages/Login" method="post">
+    <label class="mb-2">Register</label>
+    <input type="text" name="Login" placeholder="Login" class="form-control mb-2" />
+    <input type="password" name="Password" placeholder="Password" class="form-control mb-2" />
+    <input type="password" name="RepeatPassword" placeholder="Password Again" class="form-control mb-2" />
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
