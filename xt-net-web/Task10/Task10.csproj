@@ -206,6 +206,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppData.cs" />
     <Compile Include="Models\AuthModel.cs" />
     <Compile Include="Models\AppRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -256,6 +257,10 @@
     <ProjectReference Include="..\Task06.Entities\Task06.Entities.csproj">
       <Project>{83782ad9-d884-4849-93d7-3d4fd5b4ba49}</Project>
       <Name>Task06.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Task11.DAL\Task11.DAL.csproj">
+      <Project>{7be512e4-e1b7-41d6-b0a6-dc71c9c16cb5}</Project>
+      <Name>Task11.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CD61C63C-FB14-41DD-865E-DDE04065348A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Task06.PL</RootNamespace>
-    <AssemblyName>Task06.PL</AssemblyName>
+    <ProjectGuid>{7BE512E4-E1B7-41D6-B0A6-DC71C9C16CB5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Task11.DAL</RootNamespace>
+    <AssemblyName>Task11.DAL</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,36 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="SqlAwardDao.cs" />
+    <Compile Include="SqlDaoCommon.cs" />
+    <Compile Include="SqlUserAwardTableDao.cs" />
+    <Compile Include="SqlUserDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Task06.BLL.Interfaces\Task06.BLL.Interfaces.csproj">
-      <Project>{be26f879-805b-4fe1-a43b-c577b4523cd8}</Project>
-      <Name>Task06.BLL.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Task06.BLL\Task06.BLL.csproj">
-      <Project>{b3feb732-6376-47ea-ac85-b3f9fa3e4184}</Project>
-      <Name>Task06.BLL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Task06.DAL.Interfaces\Task06.DAL.Interfaces.csproj">
       <Project>{73addd7d-d91e-4f5f-9bc4-f5ac340cc4d8}</Project>
       <Name>Task06.DAL.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Task06.DAL\Task06.DAL.csproj">
-      <Project>{ee5d717e-db47-434b-82cb-69179addc8a0}</Project>
-      <Name>Task06.DAL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Task06.Entities\Task06.Entities.csproj">
       <Project>{83782ad9-d884-4849-93d7-3d4fd5b4ba49}</Project>
       <Name>Task06.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Task11.DAL\Task11.DAL.csproj">
-      <Project>{7be512e4-e1b7-41d6-b0a6-dc71c9c16cb5}</Project>
-      <Name>Task11.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

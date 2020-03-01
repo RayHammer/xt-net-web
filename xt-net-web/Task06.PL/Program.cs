@@ -3,6 +3,7 @@ using Task06.BLL;
 using Task06.BLL.Interfaces;
 using Task06.DAL;
 using Task06.Entities;
+using Task11.DAL;
 
 namespace Task06.PL
 {
@@ -15,8 +16,8 @@ namespace Task06.PL
 
         private static void Main(string[] args)
         {
-            userLogic = new UserLogic(new UserDao(), new UserAwardTableDao());
-            awardLogic = new AwardLogic(new AwardDao());
+            userLogic = new UserLogic(new SqlUserDao(), new SqlUserAwardTableDao());
+            awardLogic = new AwardLogic(new SqlAwardDao());
 
             while (ProcessInput())
             {

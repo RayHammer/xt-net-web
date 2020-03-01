@@ -2,11 +2,8 @@
 @using Task06.BLL.Interfaces;
 @using Task06.DAL;
 @{
-    IUserLogic userLogic = new UserLogic(
-        new UserDao(Server.MapPath("~/App_Data/users.db")),
-        new UserAwardTableDao(Server.MapPath("~/App_Data/users-awards.rel")));
-    IAwardLogic awardLogic = new AwardLogic(
-        new AwardDao(Server.MapPath("~/App_Data/awards.db")));
+    var userLogic = AppData.UserLogic;
+    var awardLogic = AppData.AwardLogic;
 
     string page = "~";
 
